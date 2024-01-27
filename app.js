@@ -13,6 +13,7 @@ const sub = {
   a: "ai",
   o: "ober",
   u: "ufat",
+  t: "guit",
 };
 
 buttonCopy.addEventListener("click", () => {
@@ -52,16 +53,21 @@ function encryptMessage(message) {
 }
 
 function decryptMessage(message) {
-  let messageDecrypted = message
-    .replace(/enter/g, "e")
-    .replace(/ai/g, "a")
-    .replace(/imes/g, "i")
-    .replace(/ober/g, "o")
-    .replace(/ufat/g, "u");
+  let reverseSub = {};
+
+  Object.entries(sub).forEach(([key, value]) => {
+    reverseSub[value] = key;
+  });
+
+  let regex = new RegExp(Object.keys(reverseSub).join("|"), "g");
+
+  const decryptMessage = message.replace(regex, (match) => reverseSub[match]);
+
+  // console.log(decryptMessage);
 
   nullableMesage.style.display = "none";
   result.style.display = "block";
-  result.textContent = messageDecrypted;
+  result.textContent = decryptMessage;
 
   buttonCopy.disabled = !result.textContent.trim();
 }
